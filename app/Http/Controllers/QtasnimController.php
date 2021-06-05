@@ -63,16 +63,17 @@ class QtasnimController extends Controller
         
         $data = Qtasnim_Tabel::find($id);
 
-        // $result = [
-		// 	'data' => $data,
-		// 	'status' => true,
-		// 	'status_code' => 200
-		// ];
+        $result = [
+			'data' => $data,
+			'status' => true,
+			'status_code' => 200
+		];
 
-		// header('Content-Type: application/json');
-		// echo json_encode($result);
+		header('Content-Type: application/json');
+		//echo json_encode($result);
         //return json_encode(array('data'=>$data));
-        return view('edit', ['data' => $data]);
+        return json_encode($result);
+        //return view('edit', ['data' => $data]);
     }
 
     /**

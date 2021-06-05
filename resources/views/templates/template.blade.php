@@ -47,57 +47,52 @@
             <h1>Data Tabel</h1>
         </div>
         <div class="ui container"  style="margin-bottom:1.5em;">
-            <a id="input_modal" class="ui primary labeled icon button">
+            <a id="input_modal" href="#" class="ui primary labeled icon button">
                 <i class="boxes icon"></i>
                 Tambah Data
             </a>                     
         </div>
-            <div class="table-responsive">
-                <table id="example" class="ui celled table responsive nowrap unstackable" style="width:100%">
-                <!-- <table id="example" class = "ui celled table center aligned responsive"> -->
-                    <thead>
-                        <tr>
-                            <th>No</th>
-                            <th>ID</th>
-                            <th>Nama Barang</th>
-                            <th>Stok</th>
-                            <th>Jumlah Terjual</th>
-                            <th>Tanggal Transaksi</th>
-                            <th>Jenis Barang</th>
-                            <th>Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php $count = 1 ?>
-                        @foreach( $data as $list)
-                        <tr>
-                            <td>{{$count}}</td>
-                            <td>{{$list->id}}</td>
-                            <td>{{$list->nama_barang}}</td>
-                            <td>{{$list->stok}}</td>
-                            <td>{{$list->jumlah_terjual}}</td>
-                            <td>{{$list->created_at->format('d-m-Y')}}</td>
-                            <td>{{$list->jenis_barang}}</td>
-                            <td>
-                                <div class="ui buttons">
-                                        <!-- <a href="/ubah/{{$list->id}}" class="ui positive button">Edit</a> -->
-                                        <!-- <input type="hidden" id="id" value="{{$list->id}}"> -->
-                                        <a class="ui positive button edit">Edit</a>
-                                    <div class="or" data-text="or"></div>
-                                    <form method="post" action="/delete/{{$list->id}}">
-                                    @method('delete')
-                                    @csrf
-                                        <button data-id="{{ $list->id }}" class="ui negative button delete">Delete</button>
-                                    </form>
-                                </div>
-                            </td>
-                        </tr> 
-                        <?php $count++ ?>
-                        @endforeach           
-                    </tbody>
-                </table>       
-            </div>   
-        </div>   
+        
+        <table id="example" class = "ui celled table center aligned">
+            <thead>
+                <tr>
+                <th>No</th>
+                    <th>Nama Barang</th>
+                    <th>Stok</th>
+                    <th>Jumlah Terjual</th>
+                    <th>Tanggal Transaksi</th>
+                    <th>Jenis Barang</th>
+                    <th>Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php $count = 1 ?>
+                @foreach( $data as $list)
+                <tr>
+                    <td>{{$count}}</td>
+                    <td>{{$list->nama_barang}}</td>
+                    <td>{{$list->stok}}</td>
+                    <td>{{$list->jumlah_terjual}}</td>
+                    <td>{{$list->created_at->format('d-m-Y')}}</td>
+                    <td>{{$list->jenis_barang}}</td>
+                    <td>
+                        <div class="ui buttons">
+                                <a href="/ubah/{{$list->id}}" class="ui positive button">Edit</a>
+                            <div class="or" data-text="or"></div>
+                            <form method="post" action="/delete/{{$list->id}}">
+                            @method('delete')
+                            @csrf
+                                <button class="ui negative button">Delete</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr> 
+                <?php $count++ ?>
+                @endforeach           
+            </tbody>
+        </table>
+        
+    </div>   
 
     <!-- form input with modal -->
     <div id="modalinput" class="ui modal">
@@ -128,11 +123,11 @@
         </div>
     </div>
 
-    <!-- form edit with modal  -->
+    <!-- form edit with modal 
     <div id="modaledit" class="ui modal">
         <div class="ui center aligned header">Edit Data</div>
         <div class="scrolling content">
-            <form method="post" action="/edit" id ="editform" class="ui form">
+            <form method="post" action="{{url('/ubah/')}}" class="ui form">
             @csrf
                 <input type="hidden" id="id" name="id"> 
                 <div class="field">
@@ -154,7 +149,7 @@
                 <button id="update_button" class="ui button" type="submit">Submit</button>
             </form>
         </div>
-    </div>
+    </div>-->
 
 
 
@@ -178,76 +173,76 @@
 
     <script>
         $(document).ready(function() {
-            $('#example').DataTable({
-                responsive: true,
-                "columnDefs": [
-                        { 
-                            "visible": false, 
-                            "targets": 1 
-                        }
-                    ]
-                });
-    });
-    </script>  
-
-<!-- Input data Show Modal  -->
+        $('#example').DataTable();
+    } );
+    </script>   
+    
     <script>
         $( "#input_modal" ).click(function() {
             $("#modalinput").modal('show');
         });
     </script>
 
-<!-- Update Data Using Modal   -->
-    <script>    
-        $(document).ready(function() {
-            var table = $('#example').DataTable();
-
-            table.on('click','.edit', function(){
-
-                var data = table.row(this).data();
-                var id = data[1];
-
-                $.ajax({
-                    type: 'GET',
-                    // url: "{{url('/edit/5')}}",
-                    url: '/edit/' + id,
-                    dataType: 'json',
-                    contentType: 'application/json',
-                    success: function(data){
-                        // console.log(data.data);
-                        $('#id').val(data.data.id);
-                        $('#nama_barang').val(data.data.nama_barang);
-                        $('#stok').val(data.data.stok);
-                        $('#jumlah_terjual').val(data.data.jumlah_terjual);
-                        $('#jenis_barang').val(data.data.jenis_barang);
-                        $('#editform').attr('action','/edit/'+id);
-                        $("#modaledit").modal('show');
-                    },
-                    error: function(xhr){
-                        console.log(xhr.responseText);
-                    }
-                });
+<!-- get data to modal edit data 
+    <script>
+        $( "#edit_modal" ).click(function() {
+            // var user_id = $(this).data('id');
+            $.ajax({
+                type: 'GET',
+                url: "{{url('/edit/5')}}",
+                dataType: 'json',
+                contentType: 'application/json',
+                // data: {
+                //     date: date
+                // },
+                success: function(data){
+                    console.log(data.data);
+                    $("#modaledit").modal('show');
+                    $('#id').val(data.data.id);
+                    $('#nama_barang').val(data.data.nama_barang);
+                    $('#stok').val(data.data.stok);
+                    $('#jumlah_terjual').val(data.data.jumlah_terjual);
+                    $('#jenis_barang').val(data.data.jenis_barang);
+                    $('#id').val(data.data.id);
+                    var id  = data.data.id;
+                    console.log(id);
+                },
+                error: function(xhr){
+                    console.log(xhr.responseText);
+                }
             });
         });
-    </script>
 
-    <script>    
-        $('.delete').click(function() {
-            // var table = $('#example').DataTable();
-
-            // table.on('click','.delete', function(){
-
-            //     var data = table.row(this).data();
-            //     var id = data[1];
-
-            //     //$('#deleteform-'+id).submit();
-            //     document.getElementById('deleteform-'+id).submit();
+        $( "#update_button" ).click(function() {
+            // var user_id = $(this).data('id');
+            var id = document.getElementById("#id").value;
+            console.log(id);
+            // $.ajax({
+            //     type: 'GET',
+            //     url: "{{url('/edit/5')}}",
+            //     dataType: 'json',
+            //     contentType: 'application/json',
+            //     // data: {
+            //     //     date: date
+            //     // },
+            //     success: function(data){
+            //         console.log(data.data);
+            //         $("#modaledit").modal('show');
+            //         $('#id').val(data.data.id);
+            //         $('#nama_barang').val(data.data.nama_barang);
+            //         $('#stok').val(data.data.stok);
+            //         $('#jumlah_terjual').val(data.data.jumlah_terjual);
+            //         $('#jenis_barang').val(data.data.jenis_barang);
+            //         var id  = data.data.id;
+            //         console.log(id);
+            //     },
+            //     error: function(xhr){
+            //         console.log(xhr.responseText);
+            //     }
             // });
-            var id = $(this).data("id");
-            document.getElementById('deleteform-'+id).submit();
         });
-    </script>   
+
+    </script> -->
 
   </body>
-
 </html>

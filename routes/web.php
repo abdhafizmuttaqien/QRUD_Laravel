@@ -20,7 +20,8 @@ use App\Http\Controllers\QtasnimController;
 
 Route::get('/', [QtasnimController::class, 'index']);
 Route::post('/input', [QtasnimController::class, 'store']);
-Route::get('/ubah/{id}', [QtasnimController::class, 'edit']);
+// Route::get('/ubah/{id}', [QtasnimController::class, 'edit']);
+Route::get('/edit/{id}', [QtasnimController::class, 'edit']);
 //Route::post('/ubah/{id}', [QtasnimController::class, 'update']);
-Route::post('/ubah/{id}', [QtasnimController::class, 'update']);
+Route::post('/edit/{id}', [QtasnimController::class, 'update']);
 Route::delete('/delete/{id}', [QtasnimController::class, 'destroy']);
